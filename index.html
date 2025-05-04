@@ -2,397 +2,176 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Extensible AI</title>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap"
-      rel="stylesheet"
-    />
+    <title>Extensible AI</title>
+
     <style>
+      /* ========== GLOBAL RESET ========== */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
       body {
-        font-family: "JetBrains Mono", monospace;
-        background-color: #0a0a0a;
-        color: #ffffff;
-      }
-      .logo {
-        font-family: "Cardo", serif;
-      }
-      .video-container {
-        position: relative;
-        padding-bottom: 40%;
-        height: 0;
-        overflow: hidden;
-        max-width: 300px;
-      }
-      .video-container iframe,
-      .video-container video {
-        position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
         height: 100%;
-        border: 0;
-        object-fit: cover;
+        background: #000; /* black page */
+        overflow: hidden;
+        font-family: system-ui, sans-serif;
+        color: #fff; /* white text */
       }
-      @media (max-width: 768px) {
-        .project-card {
-          border: 1px solid #1a1a1a;
-          padding: 1rem;
-          margin-bottom: 1rem;
+
+      /* ========== VARIABLES ========== */
+      :root {
+        --gap: 4px; /* gap between every cell & column   */
+        --cols: 5; /* how many vertical marquees         */
+        --rows: 8; /* visible cells per column           */
+        --scroll-time: 14s; /* marquee duration                   */
+      }
+
+      /* ========== BACKGROUND GRID ========== */
+      .background {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        gap: var(--gap); /* gap BETWEEN columns                */
+        z-index: 0;
+      }
+
+      .column {
+        flex: 1;
+        overflow: hidden;
+      }
+
+      .scroll {
+        display: flex;
+        flex-direction: column;
+        gap: var(--gap); /* gap BETWEEN rows                   */
+        animation: scroll var(--scroll-time) linear infinite;
+      }
+
+      .column:nth-child(even) .scroll {
+        animation-direction: reverse; /* alternate direction                */
+      }
+
+      /* ========== GRID CELL / IMAGE ========== */
+      .grid-image {
+        width: 100%;
+        aspect-ratio: 1 / 1; /* square cells                       */
+        object-fit: cover;
+        flex-shrink: 0;
+        background: #111; /* just in case an image fails        */
+      }
+
+      @keyframes scroll {
+        0% {
+          transform: translateY(0);
         }
-        .video-container {
-          max-width: none;
-        }
-        .container {
-          padding-left: 1rem !important;
-          padding-right: 1rem !important;
-        }
-        .space-y-24 > * + * {
-          margin-top: 2rem !important;
-        }
+        100% {
+          transform: translateY(-50%);
+        } /* first 8 cells (rows) scroll out */
+      }
+
+      /* ========== FOREGROUND CONTENT ========== */
+      .overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: 1.25rem;
+        pointer-events: none; /* let clicks through except buttons  */
+      }
+
+      h1 {
+        font-size: clamp(2.5rem, 6vw, 4rem);
+        line-height: 1.1;
+      }
+      p {
+        font-size: 1.25rem;
+        opacity: 0.85;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 1rem;
+        pointer-events: auto; /* enable button clicks               */
+      }
+
+      button {
+        padding: 0.65rem 1.8rem;
+        font-size: 1rem;
+        border: 2px solid #fff;
+        background: transparent;
+        color: #fff;
+        cursor: pointer;
+        transition: background 0.25s, color 0.25s;
+      }
+      button:hover {
+        background: #fff;
+        color: #000;
       }
     </style>
   </head>
+
   <body>
-    <!-- Header -->
-    <header class="container mx-auto px-16 py-8">
-      <div class="flex justify-between items-center">
-        <h1 class="logo text-2xl tracking-wide">Extensible AI</h1>
-        <a
-          href="mailto:omkaar@extensible.dev"
-          class="px-4 py-2 text-md bg-yellow-100/10 text-black hover:text-gray-400 transition-colors bg-yellow-100"
-          >Contact Us</a
-        >
+    <!-- background columns will be injected here -->
+    <div class="background"></div>
+
+    <!-- foreground content -->
+    <div class="overlay">
+      <h1>Extensible AI</h1>
+      <p>A step closer to the edge</p>
+      <div class="buttons">
+        <button>Waitlist</button>
+        <button>Contact&nbsp;us</button>
       </div>
-    </header>
+    </div>
 
-    <!-- Hero Section -->
-    <section class="container mx-auto px-16 py-16">
-      <h1 class="text-4xl font-bold mb-4 tracking-tight">
-        Building the future of<br />agentic experiences.
-      </h1>
-    </section>
+    <script>
+      /* ========= CONFIG ========= */
+      const images = new Array(15) // your 12 chip images
+        .fill(0)
+        .map((_, idx) => `https://extensible.dev/assets/chips/${idx + 1}.webp`);
 
-    <!-- Current Work Section -->
-    <!-- Current Work Section -->
-    <section class="container mx-auto px-16 py-16">
-      <h2 class="text-sm text-gray-400 uppercase tracking-wider mb-12">
-        Current
-      </h2>
-      <div class="space-y-24">
-        <div class="project-card">
-          <div class="flex flex-col md:flex-row gap-12">
-            <div class="w-full md:w-1/3">
-              <div class="video-container">
-                <iframe
-                  src="https://www.youtube.com/embed/h6If_v-IFOI"
-                  allowfullscreen
-                ></iframe>
-              </div>
-            </div>
-            <div class="w-full md:w-2/3">
-              <h3 class="text-xl font-bold mb-4">
-                Docker Trimmer | Cut your images by 80%
-              </h3>
-              <p class="text-gray-400 mb-4 text-sm leading-relaxed">
-                Reduce Docker image sizes by up to 80% through dynamic analysis.
-                This tool tracks actual file system usage during container
-                runtime and strips away unused files for leaner images.
-              </p>
-              <a
-                href="https://forms.gle/qRFPcFQZ4WrT8c6B6"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-blue-400 hover:text-blue-300 text-sm"
-                >Waitlist →</a
-              >
-            </div>
-          </div>
-        </div>
+      const columns =
+        parseInt(
+          getComputedStyle(document.documentElement).getPropertyValue("--cols")
+        ) || 5;
+      const visibleRows =
+        parseInt(
+          getComputedStyle(document.documentElement).getPropertyValue("--rows")
+        ) || 8;
 
-        <div class="project-card">
-          <div class="flex flex-col md:flex-row gap-12">
-            <div class="w-full md:w-1/3">
-              <div class="video-container" style="border: 1px solid #aaa">
-                <video
-                  src="./assets/1s-hero.mp4"
-                  width="max-width"
-                  height="max-height"
-                  autoplay
-                  loop
-                  muted
-                  playsinline
-                ></video>
-              </div>
-            </div>
-            <div class="w-full md:w-2/3">
-              <h3 class="text-xl font-bold mb-4">
-                1s | Go live with one sec of work
-              </h3>
-              <p class="text-gray-400 mb-4 text-sm leading-relaxed">
-                Next-generation deployment technology offering instant website
-                deployment capabilities. Experience the future of web deployment
-                with 1-second deployment times.
-              </p>
-              <a
-                href="https://1s.live"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-blue-400 hover:text-blue-300 text-sm"
-                >Visit Website →</a
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+      const bg = document.querySelector(".background");
 
-    <!-- Past Work Section -->
-    <section class="container mx-auto px-16 py-16">
-      <h2 class="text-sm text-gray-400 uppercase tracking-wider mb-12">
-        Past Work
-      </h2>
-      <div class="space-y-24">
-        <!-- Spotty -->
-        <div class="project-card">
-          <div class="flex flex-col md:flex-row gap-12">
-            <div class="w-full md:w-1/3">
-              <div class="video-container">
-                <iframe
-                  src="https://www.youtube.com/embed/uAz89t2_Eb4"
-                  allowfullscreen
-                ></iframe>
-              </div>
-            </div>
-            <div class="w-full md:w-2/3">
-              <h3 class="text-xl font-bold mb-4">
-                Spotty | Spot-Instance Orchestrator
-              </h3>
-              <p class="text-gray-400 mb-4 text-sm leading-relaxed">
-                Open-source self-hosted orchestrator for spot instances,
-                offering 60-90% cost reduction. Features integrated container
-                monitoring, optimized deployment times, and built-in
-                persistence.
-              </p>
-            </div>
-          </div>
-        </div>
+      /* ========= BUILD GRID ========= */
+      for (let c = 0; c < columns; c++) {
+        const col = document.createElement("div");
+        col.className = "column";
 
-        <!-- DAGent -->
-        <div class="project-card">
-          <div class="flex flex-col md:flex-row gap-12">
-            <div class="w-full md:w-1/3">
-              <div class="video-container">
-                <iframe
-                  src="https://www.youtube.com/embed/iq96q4ZGAFg"
-                  allowfullscreen
-                ></iframe>
-              </div>
-            </div>
-            <div class="w-full md:w-2/3">
-              <h3 class="text-xl font-bold mb-4">
-                DAGent | Agent as DAGs Framework
-              </h3>
-              <p class="text-gray-400 mb-4 text-sm leading-relaxed">
-                Lightweight Python framework for building AI agents with minimal
-                dependencies. Creates structured workflows and auto-generates
-                tool descriptions with zero agent knowledge required.
-              </p>
-            </div>
-          </div>
-        </div>
+        const scroller = document.createElement("div");
+        scroller.className = "scroll";
 
-        <!-- BeyondPDF -->
-        <div class="project-card">
-          <div class="flex flex-col md:flex-row gap-12">
-            <div class="w-full md:w-1/3">
-              <div class="video-container">
-                <iframe
-                  src="https://www.youtube.com/embed/IVRJTg4dbsY"
-                  allowfullscreen
-                ></iframe>
-              </div>
-            </div>
-            <div class="w-full md:w-2/3">
-              <h3 class="text-xl font-bold mb-4">
-                BeyondPDF | Free, Private, Smart PDF Search
-              </h3>
-              <p class="text-gray-400 mb-4 text-sm leading-relaxed">
-                Fully-local, smart PDF search app for MacOS using CoreML for
-                semantic search. Built with zero external libraries and a 42MB
-                footprint including ML model.
-              </p>
-            </div>
-          </div>
-        </div>
+        // 8 visible + duplicate 8 for seamless scroll = 16 total
+        for (let round = 0; round < 2; round++) {
+          for (let i = 0; i < visibleRows; i++) {
+            const img = document.createElement("img");
+            img.src = images[(i + c) % images.length]; // simple stagger
+            img.alt = "";
+            img.className = "grid-image";
+            scroller.appendChild(img);
+          }
+        }
 
-        <!-- Agenata -->
-        <div class="project-card">
-          <div class="flex flex-col md:flex-row gap-12">
-            <div class="w-full md:w-1/3">
-              <div class="video-container">
-                <iframe
-                  src="https://www.youtube.com/embed/JIm-ddj2fzw"
-                  allowfullscreen
-                ></iframe>
-              </div>
-            </div>
-            <div class="w-full md:w-2/3">
-              <h3 class="text-xl font-bold mb-4">
-                Agenata | Web Agent Data Standard
-              </h3>
-              <p class="text-gray-400 mb-4 text-sm leading-relaxed">
-                Open-source web annotation tool for improving web agent
-                performance through better trajectory datasets and DOM
-                reasoning.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Actbot -->
-        <div class="project-card">
-          <div class="flex flex-col md:flex-row gap-12">
-            <div class="w-full md:w-1/3">
-              <div class="video-container">
-                <iframe
-                  src="https://www.youtube.com/embed/xEM74P1P1TE"
-                  allowfullscreen
-                ></iframe>
-              </div>
-            </div>
-            <div class="w-full md:w-2/3">
-              <h3 class="text-xl font-bold mb-4">
-                Actbot | Agent on Any Website
-              </h3>
-              <p class="text-gray-400 mb-4 text-sm leading-relaxed">
-                Injectable script for adding automated task completion agents to
-                any website, moving beyond traditional chatbot interactions.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Distira -->
-        <div class="project-card">
-          <div class="flex flex-col md:flex-row gap-12">
-            <div class="w-full md:w-1/3">
-              <div class="video-container">
-                <iframe
-                  src="https://www.youtube.com/embed/KvQe8xJALj8"
-                  allowfullscreen
-                ></iframe>
-              </div>
-            </div>
-            <div class="w-full md:w-2/3">
-              <h3 class="text-xl font-bold mb-4">
-                Distira | 1st Mac-only Distributed Training Library
-              </h3>
-              <p class="text-gray-400 mb-4 text-sm leading-relaxed">
-                Distributed training module for M-series Macbooks, featuring
-                federated learning capabilities and optimized network
-                communication.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Self-Building APIs -->
-        <div class="project-card">
-          <div class="flex flex-col md:flex-row gap-12">
-            <div class="w-full md:w-1/3">
-              <div class="video-container">
-                <iframe
-                  src="https://www.youtube.com/embed/uzL2NmI-e84"
-                  allowfullscreen
-                ></iframe>
-              </div>
-            </div>
-            <div class="w-full md:w-2/3">
-              <h3 class="text-xl font-bold mb-4">
-                AutoAPI | Self-building APIs
-              </h3>
-              <p class="text-gray-400 mb-4 text-sm leading-relaxed">
-                Agent-driven API development system that automatically builds
-                and maintains APIs based on user requirements.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Paten -->
-        <div class="project-card">
-          <div class="flex flex-col md:flex-row gap-12">
-            <div class="w-full md:w-1/3">
-              <div class="video-container">
-                <iframe
-                  src="https://www.youtube.com/embed/2RsXUH4rTNI"
-                  allowfullscreen
-                ></iframe>
-              </div>
-            </div>
-            <div class="w-full md:w-2/3">
-              <h3 class="text-xl font-bold mb-4">
-                Paten | Semantic Patent Search
-              </h3>
-              <p class="text-gray-400 mb-4 text-sm leading-relaxed">
-                Semantic patent search engine handling large-scale embedding and
-                retrieval of patent data for efficient research.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Heurista -->
-        <div class="project-card">
-          <div class="flex flex-col md:flex-row gap-12">
-            <div class="w-full md:w-1/3">
-              <div class="video-container">
-                <iframe
-                  src="https://www.youtube.com/embed/bySjmOpBAVI"
-                  allowfullscreen
-                ></iframe>
-              </div>
-            </div>
-            <div class="w-full md:w-2/3">
-              <h3 class="text-xl font-bold mb-4">
-                Heurista | Agentic Heuristic Evaluations
-              </h3>
-              <p class="text-gray-400 mb-4 text-sm leading-relaxed">
-                LLM-agent-based heuristic evaluation system for automated
-                end-to-end feature testing based on user personas and test
-                descriptions.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="border-t border-gray-800 mt-16">
-      <div class="container mx-auto px-16 py-8">
-        <div class="flex justify-end space-x-6 text-sm text-gray-400">
-          <a
-            href="https://www.linkedin.com/company/101103857"
-            class="hover:text-white transition-colors"
-            >Linkedin</a
-          >
-          <a
-            href="https://www.x.com/extensibleai"
-            class="hover:text-white transition-colors"
-            >Twitter</a
-          >
-        </div>
-      </div>
-    </footer>
+        col.appendChild(scroller);
+        bg.appendChild(col);
+      }
+    </script>
   </body>
 </html>
