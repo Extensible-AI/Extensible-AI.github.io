@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Extensible AI – Blog</title>
+
+    <!-- ───── FONTS ───── -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ─── RESET ─── */
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* ─── ROOT VARS ─── */
+      :root {
+        --brand: #fff; /* white text / borders               */
+        --bg: #000; /* site background                    */
+        --card-bg: #fff; /* blog card background               */
+        --card-radius: 18px;
+      }
+
+      /* ─── BASE ─── */
+      html,
+      body {
+        height: 100%;
+        background: var(--bg);
+        color: var(--brand);
+        font: 16px/1.5 "JetBrains Mono", monospace;
+      }
+
+      /* ─── HEADER ─── */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem 2.5rem;
+        background: var(--bg);
+      }
+      .brand {
+        font-family: "Cardo", serif;
+        font-size: 1.65rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+      .nav-btns {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      /* ─── BUTTONS W/ SLIDE ANIMATION ─── */
+      .btn {
+        position: relative;
+        display: inline-block;
+        padding: 0.65rem 1.8rem;
+        font-size: 1rem;
+        border: 2px solid #fff;
+        background: #000; /* black so the border is visible */
+        color: #fff;
+        cursor: pointer;
+        overflow: hidden;
+        transition: color 0.7s ease;
+      }
+      .btn:hover {
+        color: #000;
+        background-color: #fff;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      /* ─── PAGE WRAPPER ─── */
+      main {
+        max-width: 1250px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+      }
+
+      /* ─── BLOG TITLE ─── */
+      h1.page-title {
+        font-family: "Cardo", serif;
+        font-size: clamp(2.2rem, 4vw, 3.5rem);
+        text-align: center;
+        margin-bottom: 3rem;
+        letter-spacing: 0.01em;
+      }
+
+      /* ─── BLOG GRID ─── */
+      .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 3rem 1.75rem;
+      }
+      .card {
+        background: var(--card-bg);
+        color: #000;
+        border-radius: var(--card-radius);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: transform 0.25s ease;
+      }
+      .card:hover {
+        transform: translateY(-4px);
+      }
+      .card img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+      }
+      .card .content {
+        padding: 1.1rem;
+      }
+      .card .title {
+        font-weight: 700;
+        font-size: 1.05rem;
+        line-height: 1.3;
+      }
+      .card .date {
+        margin-top: 0.6rem;
+        font-size: 0.85rem;
+        color: #555;
+      }
+
+      /* stack buttons on small screens */
+      @media (max-width: 480px) {
+        .nav-btns {
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+        .btn {
+          width: 100%;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ─── HEADER ─── -->
+    <header>
+      <div class="brand">Extensible AI</div>
+      <div class="nav-btns">
+        <a href="https://google.com" class="btn">Waitlist</a>
+        <a href="mailto:omkaar@extensible.dev" class="btn">Contact&nbsp;Us</a>
+      </div>
+    </header>
+
+    <!-- ─── MAIN ─── -->
+    <main>
+      <h1 class="page-title">Blog</h1>
+
+      <section class="blog-grid">
+        <!-- CARD 1 -->
+        <article class="card">
+          <img
+            src="https://extensible.dev/assets/chips/10.webp"
+            alt="Post cover"
+          />
+          <div class="content">
+            <div class="title">Introduction</div>
+            <div class="date">May 1, 2025</div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

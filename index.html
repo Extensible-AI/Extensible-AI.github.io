@@ -3,78 +3,118 @@
   <head>
     <meta charset="UTF-8" />
     <title>Extensible AI</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://extensible.dev/seo/favicon.jpg"
+    />
+
+    <meta name="description" content="We make models edge-ready." />
+    <meta property="og:url" content="https://extensible.dev/" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Extensible AI - Step towards the edge."
+    />
+    <meta property="og:description" content="We make models edge-ready." />
+    <meta
+      property="og:image"
+      content="https://extensible.dev/assets/seo/og.jpg"
+    />
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:domain" content="extensible.dev" />
+    <meta property="twitter:url" content="https://extensible.dev/" />
+    <meta
+      name="twitter:title"
+      content="Extensible AI - Step towards the edge."
+    />
+    <meta name="twitter:description" content="We make models edge-ready." />
+    <meta
+      name="twitter:image"
+      content="https://extensible.dev/assets/seo/og.jpg"
+    />
+
+    <!-- Meta Tags Generated via https://www.opengraph.xyz -->
+
+    <!-- ——— GOOGLE FONTS ——— -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
-      /* ========== GLOBAL RESET ========== */
+      /* ========== RESET & ROOT VARS ========== */
       *,
       *::before,
       *::after {
-        box-sizing: border-box;
         margin: 0;
         padding: 0;
+        box-sizing: border-box;
       }
+      :root {
+        --gap: 2px;
+        --cols: 5;
+        --scroll-time: 14s;
+      }
+
+      /* ========== BASE ========== */
       html,
       body {
-        width: 100%;
         height: 100%;
-        background: #000; /* black page */
+        background: #000;
+        color: #fff;
+        font: 16px/1.4 "JetBrains Mono", monospace;
         overflow: hidden;
-        font-family: system-ui, sans-serif;
-        color: #fff; /* white text */
       }
 
-      /* ========== VARIABLES ========== */
-      :root {
-        --gap: 4px; /* gap between every cell & column   */
-        --cols: 5; /* how many vertical marquees         */
-        --rows: 8; /* visible cells per column           */
-        --scroll-time: 14s; /* marquee duration                   */
-      }
-
-      /* ========== BACKGROUND GRID ========== */
+      /* ========== GRID BACKGROUND ========== */
       .background {
         position: absolute;
         inset: 0;
         display: flex;
-        gap: var(--gap); /* gap BETWEEN columns                */
+        gap: var(--gap);
         z-index: 0;
       }
-
       .column {
         flex: 1;
         overflow: hidden;
       }
-
       .scroll {
         display: flex;
         flex-direction: column;
-        gap: var(--gap); /* gap BETWEEN rows                   */
+        gap: var(--gap);
         animation: scroll var(--scroll-time) linear infinite;
+        will-change: transform;
       }
-
       .column:nth-child(even) .scroll {
-        animation-direction: reverse; /* alternate direction                */
+        animation-direction: reverse;
       }
-
-      /* ========== GRID CELL / IMAGE ========== */
       .grid-image {
         width: 100%;
-        aspect-ratio: 1 / 1; /* square cells                       */
+        aspect-ratio: 1/1;
         object-fit: cover;
+        background: #111;
         flex-shrink: 0;
-        background: #111; /* just in case an image fails        */
       }
-
+      a {
+        text-decoration: none;
+      }
       @keyframes scroll {
         0% {
           transform: translateY(0);
         }
         100% {
-          transform: translateY(-50%);
-        } /* first 8 cells (rows) scroll out */
+          transform: translateY(-20%);
+        }
       }
 
-      /* ========== FOREGROUND CONTENT ========== */
+      /* ========== OVERLAY CONTENT ========== */
       .overlay {
         position: absolute;
         inset: 0;
@@ -84,94 +124,134 @@
         align-items: center;
         justify-content: center;
         text-align: center;
-        gap: 1.25rem;
-        pointer-events: none; /* let clicks through except buttons  */
+        gap: 1.1rem;
+        pointer-events: none;
       }
-
+      .overlay::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(4px);
+      }
+      /* brand headline */
       h1 {
+        font-family: "Cardo", serif;
         font-size: clamp(2.5rem, 6vw, 4rem);
         line-height: 1.1;
+        position: relative;
       }
+      /* sub‑headline */
       p {
         font-size: 1.25rem;
-        opacity: 0.85;
+        opacity: 0.9;
+        position: relative;
       }
-
+      /* ========== BUTTONS ========== */
       .buttons {
         display: flex;
         gap: 1rem;
-        pointer-events: auto; /* enable button clicks               */
+        pointer-events: auto;
+        position: relative;
+        flex-wrap: wrap;
       }
-
-      button {
+      .btn {
+        position: relative;
+        display: inline-block;
         padding: 0.65rem 1.8rem;
         font-size: 1rem;
         border: 2px solid #fff;
-        background: transparent;
+        background: #000; /* black so the border is visible */
         color: #fff;
         cursor: pointer;
-        transition: background 0.25s, color 0.25s;
+        overflow: hidden;
+        transition: color 0.7s ease;
       }
-      button:hover {
-        background: #fff;
+      .btn:hover {
         color: #000;
+        background-color: #fff;
+      }
+
+      /* stack buttons on very narrow screens */
+      @media (max-width: 480px) {
+        .btn {
+          margin-top: 0.75rem;
+          width: 100%;
+          text-align: center;
+        }
       }
     </style>
   </head>
 
   <body>
-    <!-- background columns will be injected here -->
+    <!-- moving‑image background -->
     <div class="background"></div>
 
-    <!-- foreground content -->
+    <!-- overlay text + buttons -->
     <div class="overlay">
-      <h1>Extensible AI</h1>
-      <p>A step closer to the edge</p>
+      <h1>Extensible AI</h1>
+      <p>Make models edge-ready.</p>
       <div class="buttons">
-        <button>Waitlist</button>
-        <button>Contact&nbsp;us</button>
+        <!-- <a href="https://google.com" class="btn">Blog</a> -->
+        <a href="" class="btn">Waitlist</a>
+        <a href="mailto:omkaar@extensible.dev" class="btn">Contact Us</a>
       </div>
     </div>
 
     <script>
-      /* ========= CONFIG ========= */
-      const images = new Array(15) // your 12 chip images
-        .fill(0)
-        .map((_, idx) => `https://extensible.dev/assets/chips/${idx + 1}.webp`);
+      (() => {
+        /* ---------- CONFIG ---------- */
+        const COLS = 5;
+        const GAP = 2;
+        const IMG_POOL = Array.from(
+          { length: 15 },
+          (_, i) => `https://extensible.dev/assets/chips/${i + 1}.webp`
+        );
+        const backgroundEl = document.querySelector(".background");
 
-      const columns =
-        parseInt(
-          getComputedStyle(document.documentElement).getPropertyValue("--cols")
-        ) || 5;
-      const visibleRows =
-        parseInt(
-          getComputedStyle(document.documentElement).getPropertyValue("--rows")
-        ) || 8;
+        /* ---------- HELPERS ---------- */
+        const debounce = (fn, ms = 200) => {
+          let t;
+          return (...a) => {
+            clearTimeout(t);
+            t = setTimeout(() => fn(...a), ms);
+          };
+        };
 
-      const bg = document.querySelector(".background");
+        /* ---------- BUILD GRID ---------- */
+        function buildGrid() {
+          backgroundEl.innerHTML = "";
+          const colW = (innerWidth - (COLS - 1) * GAP) / COLS;
+          const rows = Math.ceil(innerHeight / (colW + GAP));
+          const frag = document.createDocumentFragment();
 
-      /* ========= BUILD GRID ========= */
-      for (let c = 0; c < columns; c++) {
-        const col = document.createElement("div");
-        col.className = "column";
+          for (let c = 0; c < COLS; c++) {
+            const col = document.createElement("div");
+            col.className = "column";
+            const scroller = document.createElement("div");
+            scroller.className = "scroll";
+            const startIdx = Math.floor(Math.random() * IMG_POOL.length);
 
-        const scroller = document.createElement("div");
-        scroller.className = "scroll";
-
-        // 8 visible + duplicate 8 for seamless scroll = 16 total
-        for (let round = 0; round < 2; round++) {
-          for (let i = 0; i < visibleRows; i++) {
-            const img = document.createElement("img");
-            img.src = images[(i + c) % images.length]; // simple stagger
-            img.alt = "";
-            img.className = "grid-image";
-            scroller.appendChild(img);
+            for (let r = 0; r < rows * 2; r++) {
+              const img = document.createElement("img");
+              img.className = "grid-image";
+              img.src =
+                IMG_POOL[
+                  (startIdx + Math.round(Math.random() * 50)) % IMG_POOL.length
+                ];
+              img.alt = "";
+              img.loading = "lazy";
+              scroller.appendChild(img);
+            }
+            col.appendChild(scroller);
+            frag.appendChild(col);
           }
+          backgroundEl.appendChild(frag);
         }
 
-        col.appendChild(scroller);
-        bg.appendChild(col);
-      }
+        buildGrid();
+        window.addEventListener("resize", debounce(buildGrid, 250));
+      })();
     </script>
   </body>
 </html>
